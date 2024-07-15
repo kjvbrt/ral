@@ -1,4 +1,4 @@
-#include "RAL/ReconstructedParticle.h"
+#include "ral/ReconstructedParticle.h"
 
 // std
 #include <cstdlib>

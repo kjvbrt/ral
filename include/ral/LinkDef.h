@@ -1,12 +1,13 @@
-#ifdef __CINT__
+#ifdef __CLING__
 
-//Globals
+// Globals
 #pragma link off all globals;
 #pragma link off all classes;
 #pragma link off all functions;
 #pragma link C++ nestedclasses;
+#pragma link C++ nestedtypedefs;
 
-//Dictionaries for output objects
+// Dictionaries for output objects
 #pragma link C++ class std::vector<TLorentzVector>+;
 #pragma link C++ class std::vector<std::string>+;
 
@@ -34,7 +35,7 @@
 #pragma link C++ class ROOT::VecOps::RVec<ROOT::VecOps::RVec<TVector3>>+;
 #pragma link C++ class ROOT::VecOps::RVec<ROOT::VecOps::RVec<TLorentzVector>>+;
 
-//to load all other functions
+// to load all other functions
 #pragma link C++ function dummyLoader;
 
 #endif

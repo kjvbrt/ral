@@ -46,8 +46,8 @@ file(GLOB sources src/*.cc)
 file(GLOB headers RELATIVE ${CMAKE_CURRENT_LIST_DIR} "include/${PROJECT_NAME}/*.h")
 list(FILTER headers EXCLUDE REGEX "LinkDef.h")
 
-message(STATUS "ral sources:   \n${sources}")
-message(STATUS "ral headers:   \n${headers}")
+message(STATUS "ral sources:\n   ${sources}")
+message(STATUS "ral headers:\n   ${headers}")
 
 add_library("${PROJECT_NAME}" SHARED ${sources} ${headers})
 

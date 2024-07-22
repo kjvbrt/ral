@@ -1,3 +1,6 @@
+# Backup files
+*.bk
+
 # Byte-compiled / optimized / DLL files
 spack*
 __pycache__/

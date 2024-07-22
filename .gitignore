@@ -1,6 +1,9 @@
 # Backup files
 *.bk
 
+# Compile DB for Clangd
+compile_commands.json
+
 # Byte-compiled / optimized / DLL files
 spack*
 __pycache__/

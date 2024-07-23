@@ -36,6 +36,6 @@
 #pragma link C++ class ROOT::VecOps::RVec<ROOT::VecOps::RVec<TLorentzVector>>+;
 
 // to load all other functions
-#pragma link C++ function dummyLoader;
+#pragma link C++ function loadRal;
 
 #endif

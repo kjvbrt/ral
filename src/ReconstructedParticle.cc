@@ -1,10 +1,8 @@
 #include "ral/ReconstructedParticle.h"
 
-#include "edm4hep/EDM4hepVersion.h"
+namespace k4::ral {
 
-namespace ROOTDataFrameAnalysis{
-
-  namespace ReconstructedParticle{
+  namespace ReconstructedParticle {
 
     ROOT::VecOps::RVec<int> get_PDG(ROOT::VecOps::RVec<edm4hep::ReconstructedParticleData> particles)
     {

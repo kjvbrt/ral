@@ -12,8 +12,6 @@ set(PACKAGE_VERSION
     "${PACKAGE_VERSION_MAJOR}.${PACKAGE_VERSION_MINOR}.${PACKAGE_VERSION_PATCH}"
 )
 
-# --- enable unit testing capabilities -----------------------------------------
-include(CTest)
 
 # --- Set a better default for installation directory---------------------------
 if(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
@@ -80,6 +78,12 @@ target_link_libraries(
 target_include_directories(
   "${PROJECT_NAME}" PUBLIC $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include>
                            $<INSTALL_INTERFACE:include>)
+
+# Testing
+
+include(CTest)
+
+add_subdirectory(test)
 
 # Installation policies
 

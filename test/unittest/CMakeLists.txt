@@ -1,17 +1,15 @@
-find_catch_instance()
+# Finding Catch2 package
+find_package(Catch2 3 REQUIRED)
 
-# The unittests are a bit better and they are labelled so we can put together a
-# list of labels that we want to ignore
-set(filter_tests "")
+# Defining the test executable
+set(UNITTEST_NAME unnitest)
+add_executable("${UNITTEST_NAME}" ReconstructedParticle.cpp)
+target_link_libraries(
+  "${UNITTEST_NAME}" PRIVATE Catch2::Catch2WithMain
+                             "${PROJECT_NAME}")
+target_include_directories(
+  "${UNITTEST_NAME}" PUBLIC $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include>
+                           $<INSTALL_INTERFACE:include>)
 
-add_executable(unittest ReconstructedParticle.cpp
-)
-target_link_libraries(unittest PUBLIC RAL gfortran PRIVATE Catch2::Catch2WithMain)
-target_include_directories(unittest PUBLIC ${VDT_INCLUDE_DIR})
-target_compile_definitions(unittest PUBLIC "-DTEST_INPUT_DATA_DIR=${TEST_INPUT_DATA_DIR}")
-include(Catch)
-catch_discover_tests(unittest
-    WORKING_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}
-    TEST_PREFIX "UT_" # make it possible to filter easily with -R ^UT
-    TEST_SPEC ${filter_tests} # discover only tests that are known to not fail
-)
+# Defining test command
+add_test(NAME "${UNITTEST_NAME}" COMMAND "${UNITTEST_NAME}")

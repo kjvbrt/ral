@@ -82,6 +82,7 @@ target_include_directories(
 # Testing
 
 include(CTest)
+enable_testing()
 
 add_subdirectory(test)
 

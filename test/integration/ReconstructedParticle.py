@@ -29,26 +29,27 @@ OUTPUT_CARD = {
 ROOT_FILE = "/tmp/test.root"
 FINAL_ROOT_FILE = "/tmp/test_final.root"
 
-print("Downloading Pythia files")
+if not Path(ROOT_FILE).exists():
 
-get_file(**PYTHIA_CARD)
-get_file(**DETECTOR_CARD) 
-get_file(**OUTPUT_CARD)
+    print("Downloading Pythia files")
 
-print("Running Pythia to generate root file")
+    get_file(**PYTHIA_CARD)
+    get_file(**DETECTOR_CARD) 
+    get_file(**OUTPUT_CARD)
 
-subprocess.run(
-    [
-        "DelphesPythia8_EDM4HEP", 
-        DETECTOR_CARD["path"],
-        OUTPUT_CARD["path"],
-        PYTHIA_CARD["path"],
-        ROOT_FILE
-    ],
-    stdout=subprocess.DEVNULL,
-    stderr=subprocess.DEVNULL
-).check_returncode()
-        
+    print("Running Pythia to generate root file")
+
+    subprocess.run(
+        [
+            "DelphesPythia8_EDM4HEP", 
+            DETECTOR_CARD["path"],
+            OUTPUT_CARD["path"],
+            PYTHIA_CARD["path"],
+            ROOT_FILE
+        ],
+        stdout=subprocess.DEVNULL,
+        stderr=subprocess.DEVNULL
+    ).check_returncode()
 
 print("Loading ROOT libraries")
 
@@ -63,18 +64,17 @@ print("Load ROOT dataframe and test ral functions")
 
 df = ROOT.RDataFrame("events", ROOT_FILE)
 
-df = df.Define("charge", "k4::ral::ReconstructedParticle::get_charge(ReconstructedParticles)")
+ROOT.gInterpreter.ProcessLine("using namespace k4::ral;")
+
+
+df = (df
+    .Define("charge",
+            "ReconstructedParticle::get_charge(ReconstructedParticles)")
+    .Define("energy",
+            "ReconstructedParticle::get_energy(ReconstructedParticles)")
+)
 
 print("Output new dataframe")
 
-df.Snapshot("events", FINAL_ROOT_FILE, {"charge"}) 
+df.Snapshot("events", FINAL_ROOT_FILE, ["charge", "energy"]) 
 
-
-print("Cleaning temp files")
-
-Path(DETECTOR_CARD["path"]).unlink()
-Path(OUTPUT_CARD["path"]).unlink()
-Path(PYTHIA_CARD["path"]).unlink()
-Path(ROOT_FILE).unlink()
-Path(FINAL_ROOT_FILE).unlink()
-    

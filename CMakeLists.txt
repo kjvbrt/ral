@@ -12,7 +12,6 @@ set(PACKAGE_VERSION
     "${PACKAGE_VERSION_MAJOR}.${PACKAGE_VERSION_MINOR}.${PACKAGE_VERSION_PATCH}"
 )
 
-
 # --- Set a better default for installation directory---------------------------
 if(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
   set(CMAKE_INSTALL_PREFIX
@@ -82,6 +81,7 @@ target_include_directories(
 # Testing
 
 include(CTest)
+enable_testing()
 
 add_subdirectory(test)
 

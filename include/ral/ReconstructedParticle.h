@@ -5,7 +5,7 @@
 #include "ROOT/RVec.hxx"
 #include "edm4hep/ReconstructedParticleData.h"
 
-namespace ROOTDataFrameAnalisys {
+namespace k4::ral {
 
   namespace ReconstructedParticle {
 

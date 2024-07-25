@@ -1,6 +1,9 @@
 # Backup files
 *.bk
 
+# Cache folder
+.cache/
+
 # Compile DB for Clangd
 compile_commands.json
 

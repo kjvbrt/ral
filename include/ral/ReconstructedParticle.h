@@ -5,7 +5,7 @@
 #include "Math/Vector4D.h"
 #include "ROOT/RVec.hxx"
 #include "edm4hep/ClusterData.h"
-#include "edm4hep/ReconstructedParticleData.h"
+#include "edm4hep/ReconstructedParticleCollection.h"
 #include "edm4hep/TrackData.h"
 #include "ral/LogicalOperators.h"
 #include <Math/GenVector/PxPyPzM4D.h>
@@ -217,6 +217,15 @@ get_absq(ROOT::VecOps::RVec<edm4hep::ReconstructedParticleData> particles);
  */
 ROOT::VecOps::RVec<float>
 get_m(ROOT::VecOps::RVec<edm4hep::ReconstructedParticleData> particles);
+
+/**
+ * Get mass member from ReconstructedParticles
+ *
+ * @param particles List of reconstructed particles in an event
+ *
+ */
+ROOT::VecOps::RVec<float>
+get_m(const edm4hep::ReconstructedParticleCollection &particles);
 
 /**
  * Get goodnessOfPID member from ReconstructedParticles
@@ -585,6 +594,18 @@ sel_element(int n,
 ROOT::VecOps::RVec<edm4hep::ReconstructedParticleData>
 sel_e(LogicalOperators::ComparisonOperator op, float value,
       ROOT::VecOps::RVec<edm4hep::ReconstructedParticleData> particles);
+
+/**
+ * Select a subcollection of ReconstructedParticles based on the energy
+ *
+ * @param op Comparison operator to apply with the value
+ * @param value Value of the energy that is used in the comparison
+ * @param particles Collection of reconstructed particles in an event
+ *
+ */
+edm4hep::ReconstructedParticleCollection
+sel_e(LogicalOperators::ComparisonOperator op, float value,
+      const edm4hep::ReconstructedParticleCollection &particles);
 
 /**
  * Select a subcollection of ReconstructedParticles based on the 3D momentum

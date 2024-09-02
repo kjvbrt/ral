@@ -11,7 +11,6 @@
 #include "ral/LogicalOperators.h"
 #include "ral/ReconstructedParticle.h"
 #include <Math/Vector3Dfwd.h>
-#include <edm4hep/ReconstructedParticleData.h>
 
 using namespace k4::ral;
 

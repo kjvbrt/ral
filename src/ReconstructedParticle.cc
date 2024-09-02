@@ -49,6 +49,16 @@ get_e(ROOT::VecOps::RVec<edm4hep::ReconstructedParticleData> particles) {
   return result;
 }
 
+ROOT::VecOps::RVec<float>
+get_e(const edm4hep::ReconstructedParticleCollection &particles) {
+  ROOT::VecOps::RVec<float> result;
+  result.reserve(particles.size());
+  for (edm4hep::ReconstructedParticle p : particles) {
+    result.emplace_back(p.getEnergy());
+  }
+  return result;
+}
+
 ROOT::VecOps::RVec<ROOT::Math::PxPyPzMVector>
 get_p(ROOT::VecOps::RVec<edm4hep::ReconstructedParticleData> particles) {
   ROOT::VecOps::RVec<ROOT::Math::PxPyPzMVector> result;
@@ -247,6 +257,16 @@ get_m(ROOT::VecOps::RVec<edm4hep::ReconstructedParticleData> particles) {
   return result;
 }
 
+ROOT::VecOps::RVec<float>
+get_m(const edm4hep::ReconstructedParticleCollection &particles) {
+  ROOT::VecOps::RVec<float> result;
+  result.reserve(particles.size());
+  for (const auto &p : particles) {
+    result.emplace_back(p.getMass());
+  }
+  return result;
+}
+
 ROOT::VecOps::RVec<float> get_goodnessOfPID(
     ROOT::VecOps::RVec<edm4hep::ReconstructedParticleData> particles) {
   ROOT::VecOps::RVec<float> result;
@@ -420,7 +440,7 @@ int print_goodnessOfPID::operator()(
 
 #define MASKING(T, getter, op, value, collection, result)                      \
   ROOT::VecOps::RVec<T> vec = getter(collection);                              \
-  for (T & item : vec) {                                                       \
+  for (const T &item : vec) {                                                  \
     switch (op) {                                                              \
     case LogicalOperators::ComparisonOperator::LESS:                           \
       result.emplace_back(item < value);                                       \
@@ -443,6 +463,15 @@ int print_goodnessOfPID::operator()(
 ROOT::VecOps::RVec<bool>
 mask_e(LogicalOperators::ComparisonOperator op, float value,
        ROOT::VecOps::RVec<edm4hep::ReconstructedParticleData> particles) {
+  ROOT::VecOps::RVec<bool> result;
+  result.reserve(particles.size());
+  MASKING(float, get_e, op, value, particles, result);
+  return result;
+}
+
+ROOT::VecOps::RVec<bool>
+mask_e(LogicalOperators::ComparisonOperator op, float value,
+       const edm4hep::ReconstructedParticleCollection &particles) {
   ROOT::VecOps::RVec<bool> result;
   result.reserve(particles.size());
   MASKING(float, get_e, op, value, particles, result);
@@ -629,6 +658,13 @@ sel_e(LogicalOperators::ComparisonOperator op, float value,
   auto mask = mask_e(op, value, particles);
   return LogicalOperators::filter<edm4hep::ReconstructedParticleData>(
       mask, particles);
+}
+
+edm4hep::ReconstructedParticleCollection
+sel_e(LogicalOperators::ComparisonOperator op, float value,
+      const edm4hep::ReconstructedParticleCollection &particles) {
+  auto mask = mask_e(op, value, particles);
+  return LogicalOperators::filter(mask, particles);
 }
 
 ROOT::VecOps::RVec<edm4hep::ReconstructedParticleData>

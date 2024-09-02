@@ -1,7 +1,8 @@
-import ROOT
-import urllib.request
+import sys
 import subprocess
+import urllib.request
 from pathlib import Path
+import ROOT
 
 def get_file(url: str, path: str) -> None:
     size = 0
@@ -36,12 +37,12 @@ if __name__ == "__main__":
     if not Path(ROOT_FILE).exists():
         print("Downloading Pythia files")
         get_file(**PYTHIA_CARD)
-        get_file(**DETECTOR_CARD) 
+        get_file(**DETECTOR_CARD)
         get_file(**OUTPUT_CARD)
         print("Running Pythia to generate root file")
         subprocess.run(
             [
-                "DelphesPythia8_EDM4HEP", 
+                "DelphesPythia8_EDM4HEP",
                 DETECTOR_CARD["path"],
                 OUTPUT_CARD["path"],
                 PYTHIA_CARD["path"],
@@ -53,7 +54,7 @@ if __name__ == "__main__":
     # else:
     #     subprocess.run(
     #         [
-    #             "podio-dump", 
+    #             "podio-dump",
     #             ROOT_FILE
     #         ],
     #         stdout=subprocess.DEVNULL,
@@ -62,19 +63,22 @@ if __name__ == "__main__":
 
     print("ReconstructedParticle Integration Test: START".center(80, "-"))
 
-    print("Loading ROOT libraries")
-    if not ROOT.gSystem.Load("libral") and ROOT.gSystem.Load("libedm4hep"):
-        print('RAL Found!')
-        print('EDM4HEP Found!')
-    if ROOT.loadRal and ROOT.edm4hep.ReconstructedParticleData:
-        print('RAL Loaded!')
+    if ROOT.podio.DataSource:
+        print('PODIO::DataSource Loaded!')
+    if ROOT.edm4hep.ReconstructedParticle:
         print('EDM4HEP Loaded!')
+    if ROOT.gSystem.Load("libral") < 0:
+        print('Loading of the Key4hep RAL library failed!\nAborting...')
+        sys.exit(1)
+    if ROOT.loadRal:
+        print('Key4hep RAL Loaded!')
 
     print("Loading ROOT dataframe and test ral functions")
-    df = ROOT.RDataFrame("events", ROOT_FILE)
+    df = ROOT.podio.CreateDataFrame(ROOT_FILE)
     ROOT.gInterpreter.ProcessLine("using namespace k4::ral;")
     ROOT.gInterpreter.ProcessLine("using namespace LogicalOperators;")
-    df = (df
+    df = (
+        df
         .Define("e1",
                 "ReconstructedParticle::sel_e(ComparisonOperator::LESS, 1., ReconstructedParticles)")
         .Define("e2",
@@ -83,12 +87,10 @@ if __name__ == "__main__":
                 "ReconstructedParticle::get_m(e2)")
         .Define("total_mass",
                 "ROOT::VecOps::Sum(mass)")
-    )
+         )
     print("Output test result in a new dataframe")
     df.Snapshot("events", FINAL_ROOT_FILE,
                 [
-                "e2",
-                "mass",
-                "total_mass"
-                ]) 
-
+                    "mass",
+                    "total_mass"
+                ])

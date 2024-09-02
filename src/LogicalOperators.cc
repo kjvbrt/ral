@@ -1,36 +1,11 @@
 #include "ral/LogicalOperators.h"
 #include "ROOT/RVec.hxx"
-#include <edm4hep/ReconstructedParticleData.h>
 #include <stdexcept>
 #include <string>
 
 namespace k4::ral {
 
 namespace LogicalOperators {
-
-template <typename T>
-ROOT::VecOps::RVec<T> filter(ROOT::VecOps::RVec<bool> mask,
-                             ROOT::VecOps::RVec<T> collection) {
-  if (mask.size() != collection.size()) {
-    auto msg = "Different vector lenghts: " + std::to_string(mask.size()) +
-               " and " + std::to_string(collection.size()) + ".";
-    throw std::length_error(msg);
-  }
-  ROOT::VecOps::RVec<T> result;
-  for (int i = 0; i < collection.size(); i++) {
-    if (mask[i]) {
-      result.emplace_back(collection[i]);
-    }
-  }
-  return result;
-}
-
-/// It is important to instanciate the methods that we want to use in order
-/// them to be available
-template ROOT::VecOps::RVec<edm4hep::ReconstructedParticleData>
-filter<edm4hep::ReconstructedParticleData>(
-    ROOT::VecOps::RVec<bool> mask,
-    ROOT::VecOps::RVec<edm4hep::ReconstructedParticleData> collection);
 
 ROOT::VecOps::RVec<bool> operator&&(const ROOT::VecOps::RVec<bool> &vec1,
                                     const ROOT::VecOps::RVec<bool> &vec2) {

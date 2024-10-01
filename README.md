@@ -43,6 +43,51 @@ Once your changes are ready and your fork is synced with the original repo, you 
 open a pull request on github to ask for a merge. Don't forget to pass the tests
 and format your code with clang-format.
 
+## Add more ral code with metaprograming
+
+Since ral library methods are very similar in structure and they are implemented for different 
+EDM4hep classes, a metaprograming package in python has been develop to generate the library
+code.
+
+The code generation for a function is based on the FunctionSignature class. It is a template
+that has the functionality to print the function in the header and the source files. You should
+create a new class for a new family of functions (getters, sorters...) that inherits FunctionSignature and implement the details for that family. Take a look to the FunctionGetter class to see an example.
+
+The function generator class created before is used by the RalClassWriter class to generate the 
+header and soruce files. This class store the file name, includes, namespaces and functions that 
+should be included in the cpp files and generates them. You should add a method for instanciate in
+the functions list the new function generator that you create.
+
+Finnaly, you shoud create a python script for every EDM4hep class that is going to be included in
+the library. This script shoud create a method that accept the header and source directories and 
+should instanciate a RalClassWriter and specify the EDM4hep class, includes, namespaces and 
+methods. Finally, the method should call the RalClassWriter write method to create the code
+files.
+
+The method created in the last step should be called from the __main__.py file. This allow the
+generation of the code when the package is run as a command line program.
+
+In order to use the package, it should first installed. This can be done in a virtual enviroment 
+so that you dont polute the global python installation.
+
+```
+python -m venv <path>
+source <path>/bin/activate
+```
+
+Once the virtual enviroment is sourced, you can install the package in editable mode so that every
+change will be directly apply in the installation. 
+
+```
+pip -e <main dir of the repo>
+```
+
+To use the package to generate the code, you can simply run:
+
+```
+python -m metaprograming <headerDir> <srcDir>
+```
+
 ## Interactive use
 
 In order to use this library inside ROOT REPL one can open a root file with

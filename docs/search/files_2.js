@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['reconstructedparticle_2ecc_0',['ReconstructedParticle.cc',['../ReconstructedParticle_8cc.html',1,'']]],
-  ['reconstructedparticle_2eh_1',['ReconstructedParticle.h',['../ReconstructedParticle_8h.html',1,'']]]
+  ['mcparticle_2ecc_0',['MCParticle.cc',['../MCParticle_8cc.html',1,'']]],
+  ['mcparticle_2eh_1',['MCParticle.h',['../MCParticle_8h.html',1,'']]]
 ];
